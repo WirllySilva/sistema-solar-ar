@@ -48,7 +48,7 @@ No Chrome para Windows, em uma janela com tamanho de tela de celular, foram veri
 
 ## Modelo educacional e estrutura
 
-Os raios dos corpos, distâncias, períodos, inclinações e posições são ilustrativos. As órbitas são circulares e coplanares. Os modelos usam mapas de superfície ou de atmosfera, com cores ajustadas para visualização. Os planetas estão ordenados por distância ao Sol.
+Os raios dos corpos, distâncias, períodos, inclinações e posições são ilustrativos. As órbitas são circulares e coplanares. As linhas mostram as oito órbitas planetárias. A Lua se move ao redor da Terra sem linha de trajetória. Os modelos usam mapas de superfície ou de atmosfera, com cores ajustadas para visualização. Os planetas estão ordenados por distância ao Sol.
 
 - `assets/hiro.png` é o marcador distribuído pelo [projeto AR.js](https://github.com/AR-js-org/AR.js/blob/3.4.7/data/images/hiro.png).
 - `index.html` contém a interface e o ponto de entrada.
