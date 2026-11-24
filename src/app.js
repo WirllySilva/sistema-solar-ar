@@ -1,4 +1,4 @@
-import { registerSolarSystem } from './solar-system.js?v=composicao';
+import { registerSolarSystem } from './solar-system.js?v=angulo';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';
