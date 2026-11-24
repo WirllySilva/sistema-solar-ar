@@ -1,4 +1,4 @@
-import { registerSolarSystem } from './solar-system.js?v=cena';
+import { registerSolarSystem } from './solar-system.js?v=orbitas';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';

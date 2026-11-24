@@ -46,6 +46,9 @@ export function registerSolarSystem(AFRAME) {
 
       const sphere = new THREE.SphereGeometry(1, 40, 24);
       const loader = new THREE.TextureLoader();
+      const orbitMaterial = new THREE.LineBasicMaterial({
+        color: '#7f9fbc', transparent: true, opacity: .48, depthWrite: false
+      });
 
       this.bodies = solarBodies.map((body, index) => {
         const pivot = new THREE.Group();
@@ -78,6 +81,15 @@ export function registerSolarSystem(AFRAME) {
             ring.rotation.x = -Math.PI / 2;
             axis.add(ring);
           }
+        }
+
+        if (!body.primary) {
+          const points = Array.from({ length: 80 }, (_, i) => {
+            const angle = i * turn / 80;
+            return new THREE.Vector3(Math.cos(angle) * body.orbit, height, Math.sin(angle) * body.orbit);
+          });
+          const geometry = new THREE.BufferGeometry().setFromPoints(points);
+          this.overview.add(new THREE.LineLoop(geometry, orbitMaterial));
         }
 
         return { body, pivot, axis, globe };
