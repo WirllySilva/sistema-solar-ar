@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Sistema Solar Interativo em Realidade Aumentada</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./src/styles.css">
+  <link rel="stylesheet" href="./src/styles.css?v=cena">
   <script defer src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <script type="module" src="./src/app.js?v=lua"></script>
+  <script type="module" src="./src/app.js?v=cena"></script>
 </head>
 <body>
   <div id="stage" aria-hidden="true"></div>
@@ -31,19 +31,6 @@
       <button id="back" type="button">Voltar ao Sistema Solar</button>
     </section>
   </main>
-  <footer id="controls" hidden>
-    <div class="playback">
-      <button id="pause" type="button">Pausar</button>
-      <label for="speed">Velocidade</label>
-      <select id="speed">
-        <option value="0.5">0,5×</option>
-        <option value="1" selected>1×</option>
-        <option value="2">2×</option>
-        <option value="4">4×</option>
-      </select>
-    </div>
-    <nav id="planets" aria-label="Selecionar um astro"></nav>
-  </footer>
   <noscript>Ative o JavaScript para abrir a simulação.</noscript>
 </body>
 </html>
