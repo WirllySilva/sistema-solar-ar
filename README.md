@@ -42,6 +42,10 @@ O Chrome permite câmera em `localhost` quando a página roda no próprio dispos
 
 O modo sem câmera permite testar a renderização, a seleção e a animação no computador. A câmera traseira, a solicitação de permissão, a estabilidade do rastreamento e o toque no Chrome do Android precisam de validação no aparelho físico.
 
+## Gravar no iPhone
+
+Abra o modo de realidade aumentada no Safari. Desative o bloqueio de orientação do iPhone e vire o aparelho de lado. A interface se reorganiza em paisagem e o guia de rotação desaparece. Enquadre o Hiro e inicie a gravação de tela pelo iPhone.
+
 ## Verificações realizadas
 
 No Chrome para Windows, em uma janela com tamanho de tela de celular, foram verificados o Sol do MVP, o movimento orbital, a rotação, a pausa automática, a seleção por toque simulado, a ampliação, o cartão educativo e o retorno à visão geral. Uma câmera virtual exibindo o marcador Hiro também foi usada para verificar a detecção e a renderização nos dois modos de RA. O teste físico no Android permanece pendente.
