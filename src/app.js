@@ -1,4 +1,4 @@
-import { planets } from './planets.js';
+import { solarBodies } from './planets.js';
 import { registerSolarSystem } from './solar-system.js';
 
 const params = new URLSearchParams(location.search);
@@ -66,7 +66,7 @@ async function start() {
   } else {
     scene.setAttribute('background', 'color: #080e20');
     camera.setAttribute('rotation', '-36.87 0 0');
-    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque em um planeta ou escolha pelo nome.';
+    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque no Sol ou em um planeta, ou escolha pelo nome.';
   }
   scene.append(anchor);
 
@@ -120,10 +120,10 @@ function bindControls(scene, system, frameSelection) {
   const name = document.querySelector('#planet-name');
   const pause = document.querySelector('#pause');
   const menu = document.querySelector('#planets');
-  const buttons = planets.map((planet, index) => {
+  const buttons = solarBodies.map((body, index) => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.textContent = planet.name;
+    button.textContent = body.name;
     button.addEventListener('click', () => select(index));
     menu.append(button);
     return button;
@@ -133,10 +133,10 @@ function bindControls(scene, system, frameSelection) {
     if (simulation.selected !== null) return;
     simulation.select(index);
     frameSelection?.(true);
-    const planet = planets[index];
-    name.textContent = planet.name;
-    document.querySelector('#planet-type').textContent = planet.kind;
-    document.querySelector('#planet-fact').textContent = planet.fact;
+    const body = solarBodies[index];
+    name.textContent = body.name;
+    document.querySelector('#planet-type').textContent = body.kind;
+    document.querySelector('#planet-fact').textContent = body.fact;
     controls.hidden = true;
     details.hidden = false;
     name.focus();
