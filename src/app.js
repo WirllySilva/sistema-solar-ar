@@ -1,5 +1,5 @@
-import { solarBodies } from './planets.js';
-import { registerSolarSystem } from './solar-system.js';
+import { solarBodies } from './planets.js?v=lua';
+import { registerSolarSystem } from './solar-system.js?v=lua';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';
