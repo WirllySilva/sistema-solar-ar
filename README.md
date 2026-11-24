@@ -66,6 +66,6 @@ Os raios dos corpos, distâncias, períodos, inclinações e posições são ilu
 
 ## Vistas dos astros e créditos
 
-Ao selecionar um astro, a animação congela e o modelo mostra uma vista fixa voltada para a câmera. A vista da Terra é centrada na América do Sul e inclui a América Central e o México. Ao voltar, a posição orbital, o giro e a inclinação são restaurados. Toque na Lua, que orbita a Terra, para ver sua face voltada para nós e ler sobre sua rotação síncrona.
+Ao tocar em um astro, a animação congela na rotação daquele instante e o modelo é ampliado. Em realidade aumentada, mantenha o Hiro na câmera e mova o celular ao redor do marcador para ver outros lados do astro. Ao voltar, a simulação continua de onde parou.
 
 Os mapas do Sol, dos oito planetas e da Lua foram produzidos por [Solar System Scope](https://www.solarsystemscope.com/textures/) e são distribuídos sob a licença [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Os mapas de Terra e Marte mantêm a resolução de 2K. Os demais foram reduzidos para 1024 × 512 para o uso em celular. Vênus usa a vista de sua atmosfera. Os anéis de Saturno usam uma representação ilustrativa. As informações sobre o Sol foram consultadas na NASA. [Sol](https://science.nasa.gov/sun/facts/) · [Lua](https://science.nasa.gov/moon/facts/).
