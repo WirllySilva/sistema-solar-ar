@@ -56,14 +56,12 @@ export function registerSolarSystem(AFRAME) {
           ? new THREE.MeshBasicMaterial({ map: texture(THREE, body, 42) })
           : new THREE.MeshStandardMaterial({ map: texture(THREE, body, index), roughness: .95 });
 
-        if (body.image) {
-          const url = new URL('../assets/' + body.image, import.meta.url);
-          loader.load(url.href, (map) => {
-            map.colorSpace = THREE.SRGBColorSpace;
-            material.map.dispose();
-            material.map = map;
-          }, undefined, () => console.warn('Textura indisponível:', body.name));
-        }
+        const url = new URL('../assets/' + body.image, import.meta.url);
+        loader.load(url.href, (map) => {
+          map.colorSpace = THREE.SRGBColorSpace;
+          material.map.dispose();
+          material.map = map;
+        }, undefined, () => console.warn('Textura indisponível:', body.name));
 
         const globe = new THREE.Mesh(sphere, material);
         globe.scale.setScalar(body.radius);
@@ -72,7 +70,7 @@ export function registerSolarSystem(AFRAME) {
         pivot.add(axis);
         pivot.userData.bodyIndex = index;
         this.overview.add(pivot);
-        if (body === sun) return { body, pivot, globe };
+        if (body === sun) return { body, pivot, axis, globe };
         if (body.rings) {
           for (const [inner, outer, color] of [[1.23, 1.50, '#b39568'], [1.55, 1.94, '#dcc39b']]) {
             const ring = new THREE.Mesh(
@@ -93,10 +91,18 @@ export function registerSolarSystem(AFRAME) {
           new THREE.LineBasicMaterial({ color: '#7f9fbc', transparent: true, opacity: .48, depthWrite: false })
         );
         this.overview.add(orbit);
-        return { body, pivot, globe };
+        return { body, pivot, axis, globe };
       });
       this.ray = new THREE.Raycaster();
       this.pointer = new THREE.Vector2();
+      this.focusView = {
+        cameraPosition: new THREE.Vector3(),
+        pivotPosition: new THREE.Vector3(),
+        up: new THREE.Vector3(),
+        cameraRotation: new THREE.Quaternion(),
+        worldRotation: new THREE.Quaternion(),
+        lookAt: new THREE.Matrix4()
+      };
       this.updatePositions();
     },
 
@@ -113,7 +119,12 @@ export function registerSolarSystem(AFRAME) {
     },
 
     tick(_time, milliseconds) {
-      if (this.paused || this.selected !== null || !this.el.parentElement.object3D.visible) return;
+      if (!this.el.parentElement.object3D.visible) return;
+      if (this.selected !== null) {
+        this.faceCamera();
+        return;
+      }
+      if (this.paused) return;
       this.elapsed += Math.min(milliseconds, 100) / 1000 * this.speed;
       this.updatePositions();
     },
@@ -135,17 +146,38 @@ export function registerSolarSystem(AFRAME) {
     },
 
     select(index) {
-      const { body, pivot } = this.bodies[index];
+      const { body, pivot, axis, globe } = this.bodies[index];
       this.selected = index;
       this.focus.add(pivot);
       pivot.position.set(0, 1.05, 0);
       pivot.scale.setScalar((body.rings ? .56 : .78) / body.radius);
+      const [latitude, longitude] = body.focus;
+      // No mapeamento da esfera, o meridiano de -90° aponta para +Z.
+      axis.rotation.set(THREE.MathUtils.degToRad(latitude), THREE.MathUtils.degToRad(-90 - longitude), 0);
+      globe.rotation.y = 0;
       this.overview.visible = false;
+      this.faceCamera();
+    },
+
+    faceCamera() {
+      const camera = this.el.sceneEl.camera;
+      if (!camera) return;
+      const { pivot } = this.bodies[this.selected];
+      const { cameraPosition, pivotPosition, up, cameraRotation, worldRotation, lookAt } = this.focusView;
+      camera.getWorldPosition(cameraPosition);
+      camera.getWorldQuaternion(cameraRotation);
+      pivot.getWorldPosition(pivotPosition);
+      up.set(0, 1, 0).applyQuaternion(cameraRotation);
+      lookAt.lookAt(cameraPosition, pivotPosition, up);
+      worldRotation.setFromRotationMatrix(lookAt);
+      this.focus.getWorldQuaternion(pivot.quaternion).invert().multiply(worldRotation);
     },
 
     showOverview() {
-      const { pivot } = this.bodies[this.selected];
+      const { body, pivot, axis } = this.bodies[this.selected];
       this.overview.add(pivot);
+      pivot.quaternion.identity();
+      axis.rotation.set(0, 0, body === sun ? 0 : body.tilt ?? .22);
       pivot.scale.setScalar(1);
       this.selected = null;
       this.updatePositions();

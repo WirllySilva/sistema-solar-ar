@@ -71,9 +71,9 @@ async function start() {
   scene.append(anchor);
 
   const ambient = document.createElement('a-entity');
-  ambient.setAttribute('light', 'type: ambient; intensity: 1.15');
+  ambient.setAttribute('light', 'type: ambient; intensity: .8');
   const key = document.createElement('a-entity');
-  key.setAttribute('light', 'type: directional; intensity: 2.1');
+  key.setAttribute('light', 'type: directional; intensity: 1.05');
   key.setAttribute('position', '-3 6 4');
   scene.append(ambient, key);
 
@@ -108,7 +108,7 @@ async function start() {
   const sun = document.createElement('a-sphere');
   sun.setAttribute('radius', '0.38');
   sun.setAttribute('position', '0 0.46 0');
-  sun.setAttribute('material', 'shader: flat; color: #ffad42');
+  sun.setAttribute('material', 'shader: flat; src: url(./assets/sol.jpg)');
   anchor.append(sun);
   stage.append(scene);
 }
@@ -131,8 +131,8 @@ function bindControls(scene, system, frameSelection) {
 
   function select(index) {
     if (simulation.selected !== null) return;
-    simulation.select(index);
     frameSelection?.(true);
+    simulation.select(index);
     const body = solarBodies[index];
     name.textContent = body.name;
     document.querySelector('#planet-type').textContent = body.kind;
