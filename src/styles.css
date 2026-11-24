@@ -45,16 +45,20 @@ a:hover, button:hover, a[aria-current="page"] { background: #253b61; }
     font-size: .875rem;
   }
 }
+.ar #stage { z-index: 1; }
+.ar #stage a-scene, .ar #arjs-video {
+  inset: 50% auto auto 50% !important;
+  width: max(100vw, calc(100dvh * var(--ar-video-aspect, 1.333333))) !important;
+  height: max(100dvh, calc(100vw / var(--ar-video-aspect, 1.333333))) !important;
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+}
+.ar #arjs-video { position: fixed !important; z-index: 0 !important; pointer-events: none; }
 @media (orientation: landscape) {
-  .ar #stage { z-index: 1; }
   .ar #stage a-scene, .ar #arjs-video {
-    inset: 50% auto auto 50% !important;
     width: clamp(calc(100dvh * var(--ar-video-aspect, 1.333333)), 100vw, calc(130dvh * var(--ar-video-aspect, 1.333333))) !important;
     height: clamp(100dvh, calc(100vw / var(--ar-video-aspect, 1.333333)), 130dvh) !important;
-    margin: 0 !important;
-    transform: translate(-50%, -50%);
   }
-  .ar #arjs-video { position: fixed !important; z-index: 0 !important; pointer-events: none; }
 }
 @media (orientation: landscape) and (max-height: 500px) {
   header {
@@ -69,4 +73,9 @@ a:hover, button:hover, a[aria-current="page"] { background: #253b61; }
   header nav { justify-content: flex-end; }
   #status { grid-column: 1 / -1; margin: 2px 0 0; }
   main { left: auto; max-width: 56vw; }
+  .ar #details {
+    width: clamp(180px, 31vw, 300px);
+    max-height: calc(100dvh - 100px - env(safe-area-inset-bottom));
+    overflow: auto;
+  }
 }

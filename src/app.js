@@ -47,7 +47,8 @@ async function start() {
     } catch {
       throw new Error('O AR.js não carregou. Confira a conexão e recarregue.');
     }
-    // AR.js cria o vídeo fora da cena e ajusta seu tamanho para cobrir a tela.
+    // Registra depois do sistema do AR.js para ajustar a projeção antes do desenho.
+    registerArProjectionCorrection(window.AFRAME);
     document.body.classList.add('ar');
     scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false; detectionMode: mono; canvasWidth: 640; canvasHeight: 480; maxDetectionRate: 30');
     anchor = document.createElement('a-marker');
@@ -60,7 +61,7 @@ async function start() {
       const matchVideoAspect = () => {
         if (!video.videoWidth || !video.videoHeight) return;
         document.body.style.setProperty('--ar-video-aspect', video.videoWidth / video.videoHeight);
-        if (window.matchMedia('(orientation: landscape)').matches) scene.resize();
+        scene.resize();
       };
       video.addEventListener('loadedmetadata', matchVideoAspect);
       video.addEventListener('resize', matchVideoAspect);
@@ -119,6 +120,36 @@ async function start() {
   sun.setAttribute('material', 'shader: flat; src: url(./assets/sol.jpg)');
   anchor.append(sun);
   stage.append(scene);
+}
+
+function registerArProjectionCorrection(AFRAME) {
+  AFRAME.registerSystem('ar-projection-aspect', {
+    init() {
+      this.marker = this.el.querySelector('a-marker');
+      this.markerCenter = new AFRAME.THREE.Vector3();
+    },
+
+    tick() {
+      const { camera, canvas } = this.el;
+      if (!camera || !canvas || !this.marker?.object3D.visible) return;
+
+      const projection = camera.projectionMatrix;
+      const matrix = projection.elements;
+      const correction = canvas.clientHeight * Math.abs(matrix[5]) /
+        (canvas.clientWidth * Math.abs(matrix[0]));
+
+      if (Number.isFinite(correction) && Math.abs(correction - 1) > .005) {
+        // Ajusta a escala horizontal em torno da posição projetada do Hiro.
+        const center = this.marker.object3D.getWorldPosition(this.markerCenter).project(camera);
+        const offset = (1 - correction) * center.x;
+        for (let column = 0; column < 16; column += 4) {
+          matrix[column] = correction * matrix[column] + offset * matrix[column + 3];
+        }
+      }
+
+      camera.projectionMatrixInverse.copy(projection).invert();
+    }
+  });
 }
 
 function bindDetails(scene, system, frameSelection) {
