@@ -37,11 +37,18 @@ function texture(THREE, build, seed) {
 export function registerSolarSystem(AFRAME) {
   const { THREE } = AFRAME;
   AFRAME.registerComponent('solar-system', {
+    schema: {
+      overviewScale: { default: 1 },
+      focusScale: { default: 1 }
+    },
+
     init() {
       this.elapsed = 0;
       this.selected = null;
       this.overview = new THREE.Group();
       this.focus = new THREE.Group();
+      this.overview.scale.setScalar(this.data.overviewScale);
+      this.focus.scale.setScalar(this.data.focusScale);
       this.el.object3D.add(this.overview, this.focus);
 
       const sphere = new THREE.SphereGeometry(1, 40, 24);
@@ -138,6 +145,8 @@ export function registerSolarSystem(AFRAME) {
         1 - (event.clientY - rect.top) / rect.height * 2
       );
       scene.object3D.updateMatrixWorld(true);
+      // O AR.js substitui a projeção da câmera ao aplicar a calibração.
+      scene.camera.projectionMatrixInverse.copy(scene.camera.projectionMatrix).invert();
       this.ray.setFromCamera(this.pointer, scene.camera);
       const hit = this.ray.intersectObjects(this.bodies.map(({ pivot }) => pivot), true)[0];
       let target = hit?.object;

@@ -1,4 +1,4 @@
-import { registerSolarSystem } from './solar-system.js?v=cena';
+import { registerSolarSystem } from './solar-system.js?v=hiro';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';
@@ -47,15 +47,15 @@ async function start() {
     } catch {
       throw new Error('O AR.js não carregou. Confira a conexão e recarregue.');
     }
-    // AR.js cria o vídeo fora da cena e ajusta seu tamanho para cobrir a tela.
     document.body.classList.add('ar');
-    scene.setAttribute('arjs', 'sourceType: webcam; debugUIEnabled: false; detectionMode: mono; canvasWidth: 640; canvasHeight: 480; maxDetectionRate: 30');
+    scene.setAttribute('arjs', 'sourceType: webcam; sourceWidth: 1280; sourceHeight: 960; debugUIEnabled: false; detectionMode: mono; canvasWidth: 640; canvasHeight: 480; maxDetectionRate: 30');
     anchor = document.createElement('a-marker');
     anchor.setAttribute('preset', 'hiro');
     anchor.setAttribute('smooth', 'true');
     anchor.addEventListener('markerFound', () => { status.textContent = mvp ? 'Marcador Hiro detectado' : 'Marcador Hiro detectado. Toque em um astro.'; });
     anchor.addEventListener('markerLost', () => { status.textContent = 'Marcador fora de vista. Aponte a câmera para o Hiro.'; });
-    window.addEventListener('arjs-video-loaded', () => {
+    window.addEventListener('arjs-video-loaded', ({ detail }) => {
+      fitCameraFrame(detail.component, scene);
       status.textContent = 'Aponte a câmera para o marcador Hiro.';
     });
     window.addEventListener('camera-error', () => {
@@ -97,7 +97,7 @@ async function start() {
   if (!mvp) {
     registerSolarSystem(window.AFRAME);
     const system = document.createElement('a-entity');
-    system.setAttribute('solar-system', '');
+    system.setAttribute('solar-system', ar ? 'overviewScale: 0.22; focusScale: 0.65' : '');
     anchor.append(system);
     scene.addEventListener('loaded', () => bindDetails(scene, system, frameSelection), { once: true });
     stage.append(scene);
@@ -110,6 +110,29 @@ async function start() {
   sun.setAttribute('material', 'shader: flat; src: url(./assets/sol.jpg)');
   anchor.append(sun);
   stage.append(scene);
+}
+
+function fitCameraFrame(video, scene) {
+  let previousWidth = 0;
+  let previousHeight = 0;
+
+  function fit() {
+    if (!video.videoWidth || !video.videoHeight) return;
+    const scale = Math.min(window.innerWidth / video.videoWidth, window.innerHeight / video.videoHeight);
+    const width = Math.round(video.videoWidth * scale);
+    const height = Math.round(video.videoHeight * scale);
+    if (width === previousWidth && height === previousHeight) return;
+    previousWidth = width;
+    previousHeight = height;
+    document.body.style.setProperty('--ar-frame-width', width + 'px');
+    document.body.style.setProperty('--ar-frame-height', height + 'px');
+    scene.resize();
+  }
+
+  video.addEventListener('loadedmetadata', fit);
+  video.addEventListener('resize', fit);
+  window.addEventListener('resize', fit);
+  fit();
 }
 
 function bindDetails(scene, system, frameSelection) {
