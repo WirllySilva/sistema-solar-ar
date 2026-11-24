@@ -1,4 +1,4 @@
-import { registerSolarSystem } from './solar-system.js?v=paisagem';
+import { registerSolarSystem } from './solar-system.js?v=composicao';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';
@@ -90,7 +90,7 @@ async function start() {
     let focused = false;
     const frameScene = () => {
       const aspect = stage.clientWidth / Math.max(stage.clientHeight, 1);
-      let distance = Math.max(11.2, 11 / aspect);
+      let distance = Math.max(10.5, 10.4 / aspect);
       if (mvp) distance = Math.max(3, 1.25 / aspect);
       if (focused) distance = Math.max(3.5, 2.6 / aspect);
       camera.setAttribute('position', { x: 0, y: distance * .6 + (focused ? 1.05 : 0), z: distance * .8 });
