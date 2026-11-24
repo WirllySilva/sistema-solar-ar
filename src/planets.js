@@ -19,4 +19,22 @@ export const sun = {
   radius: .38
 };
 
-export const solarBodies = [sun, ...planets];
+const moon = {
+  name: 'Lua',
+  image: 'lua.jpg',
+  focus: [3, 0],
+  kind: 'Satélite natural da Terra',
+  fact: 'A Lua leva cerca de 27,3 dias para completar uma volta ao redor da Terra e uma rotação em torno do próprio eixo. Por isso, vemos quase sempre a mesma face da Lua.',
+  colors: ['#aaa9a4', '#6f6f6b', '#dedbd0'],
+  primary: 'Terra',
+  radius: .065,
+  orbit: .29,
+  period: 5,
+  spin: -5,
+  phase: 1.2,
+  tilt: 0
+};
+
+export const solarBodies = [sun, ...planets.flatMap(planet =>
+  planet.name === moon.primary ? [planet, moon] : [planet]
+)];

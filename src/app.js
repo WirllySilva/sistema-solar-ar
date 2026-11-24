@@ -66,7 +66,7 @@ async function start() {
   } else {
     scene.setAttribute('background', 'color: #080e20');
     camera.setAttribute('rotation', '-36.87 0 0');
-    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque no Sol ou em um planeta, ou escolha pelo nome.';
+    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque em um astro ou escolha pelo nome.';
   }
   scene.append(anchor);
 

@@ -91,8 +91,13 @@ export function registerSolarSystem(AFRAME) {
           new THREE.LineBasicMaterial({ color: '#7f9fbc', transparent: true, opacity: .48, depthWrite: false })
         );
         this.overview.add(orbit);
-        return { body, pivot, axis, globe };
+        return { body, pivot, axis, globe, orbit };
       });
+      for (const item of this.bodies) {
+        if (item.body.primary) {
+          item.primaryPivot = this.bodies.find(({ body }) => body.name === item.body.primary).pivot;
+        }
+      }
       this.ray = new THREE.Raycaster();
       this.pointer = new THREE.Vector2();
       this.focusView = {
@@ -107,14 +112,21 @@ export function registerSolarSystem(AFRAME) {
     },
 
     updatePositions() {
-      for (const { body, pivot, globe } of this.bodies) {
+      for (const { body, pivot, globe, orbit, primaryPivot } of this.bodies) {
         if (body === sun) {
           pivot.position.set(0, height, 0);
           continue;
         }
         const angle = body.phase + (this.elapsed % body.period) * turn / body.period;
         pivot.position.set(Math.cos(angle) * body.orbit, height, Math.sin(angle) * body.orbit);
-        globe.rotation.y = (this.elapsed % body.spin) * turn / body.spin;
+        if (primaryPivot) {
+          const { x, z } = primaryPivot.position;
+          pivot.position.x += x;
+          pivot.position.z += z;
+          orbit.position.set(x, 0, z);
+        }
+        const spinOffset = primaryPivot ? Math.PI - body.phase : 0;
+        globe.rotation.y = spinOffset + (this.elapsed % body.spin) * turn / body.spin;
       }
     },
 
