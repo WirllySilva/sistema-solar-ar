@@ -1,4 +1,4 @@
-import { registerSolarSystem } from './solar-system.js?v=orbitas';
+import { registerSolarSystem } from './solar-system.js?v=paisagem';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';
@@ -55,7 +55,16 @@ async function start() {
     anchor.setAttribute('smooth', 'true');
     anchor.addEventListener('markerFound', () => { status.textContent = mvp ? 'Marcador Hiro detectado' : 'Marcador Hiro detectado. Toque em um astro.'; });
     anchor.addEventListener('markerLost', () => { status.textContent = 'Marcador fora de vista. Aponte a câmera para o Hiro.'; });
-    window.addEventListener('arjs-video-loaded', () => {
+    window.addEventListener('arjs-video-loaded', ({ detail }) => {
+      const video = detail.component;
+      const matchVideoAspect = () => {
+        if (!video.videoWidth || !video.videoHeight) return;
+        document.body.style.setProperty('--ar-video-aspect', video.videoWidth / video.videoHeight);
+        if (window.matchMedia('(orientation: landscape)').matches) scene.resize();
+      };
+      video.addEventListener('loadedmetadata', matchVideoAspect);
+      video.addEventListener('resize', matchVideoAspect);
+      matchVideoAspect();
       status.textContent = 'Aponte a câmera para o marcador Hiro.';
     });
     window.addEventListener('camera-error', () => {
@@ -81,7 +90,7 @@ async function start() {
     let focused = false;
     const frameScene = () => {
       const aspect = stage.clientWidth / Math.max(stage.clientHeight, 1);
-      let distance = Math.max(10, 9.7 / aspect);
+      let distance = Math.max(11.2, 11 / aspect);
       if (mvp) distance = Math.max(3, 1.25 / aspect);
       if (focused) distance = Math.max(3.5, 2.6 / aspect);
       camera.setAttribute('position', { x: 0, y: distance * .6 + (focused ? 1.05 : 0), z: distance * .8 });

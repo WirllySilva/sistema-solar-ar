@@ -1,4 +1,4 @@
-import { solarBodies, sun } from './planets.js?v=lua';
+import { solarBodies, sun } from './planets.js?v=paisagem';
 
 const turn = Math.PI * 2;
 const height = .46;

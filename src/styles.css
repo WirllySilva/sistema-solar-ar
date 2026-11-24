@@ -5,7 +5,16 @@ body { margin: 0; overflow: hidden; }
 #stage { position: fixed; inset: 0; overflow: hidden; }
 #stage a-scene { position: absolute; inset: 0; }
 #stage canvas { touch-action: none; }
-body.ar { background: transparent; }
+/* O vídeo pode exceder a tela sem tornar a página maior que a janela. */
+body.ar {
+  position: fixed;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  overflow: hidden;
+  background: transparent;
+}
 header, main { position: fixed; z-index: 2; left: 0; right: 0; pointer-events: none; }
 header, main { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
 header { top: 0; padding-top: max(14px, env(safe-area-inset-top)); background: linear-gradient(#080e20f7, #080e2000); }
@@ -23,7 +32,41 @@ a:hover, button:hover, a[aria-current="page"] { background: #253b61; }
 #details { pointer-events: auto; width: min(100%, 390px); padding: 14px 16px; background: #101b30f5; border: 1px solid #52668e; border-radius: 12px; }
 #details h2 { margin: 0; font-size: 1.4rem; }
 .planet-type { color: #abcafa; font-size: .875rem; }
-@media (max-height: 480px) {
-  header { right: auto; max-width: 52vw; }
+.rotation-hint { display: none; }
+@media (orientation: portrait) {
+  .ar .rotation-hint {
+    display: block;
+    width: fit-content;
+    margin-top: 0;
+    padding: 5px 9px;
+    border-radius: 8px;
+    background: #101b30ed;
+    color: #d0ddf3;
+    font-size: .875rem;
+  }
+}
+@media (orientation: landscape) {
+  .ar #stage { z-index: 1; }
+  .ar #stage a-scene, .ar #arjs-video {
+    inset: 50% auto auto 50% !important;
+    width: clamp(calc(100dvh * var(--ar-video-aspect, 1.333333)), 100vw, calc(130dvh * var(--ar-video-aspect, 1.333333))) !important;
+    height: clamp(100dvh, calc(100vw / var(--ar-video-aspect, 1.333333)), 130dvh) !important;
+    margin: 0 !important;
+    transform: translate(-50%, -50%);
+  }
+  .ar #arjs-video { position: fixed !important; z-index: 0 !important; pointer-events: none; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0 12px;
+    padding-top: max(6px, env(safe-area-inset-top));
+  }
+  .heading h1 { font-size: clamp(1rem, 2.5vw, 1.35rem); }
+  .heading p { margin: 2px 0 0; }
+  header nav { justify-content: flex-end; }
+  #status { grid-column: 1 / -1; margin: 2px 0 0; }
   main { left: auto; max-width: 56vw; }
 }
