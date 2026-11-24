@@ -48,7 +48,7 @@ No Chrome para Windows, em uma janela com tamanho de tela de celular, foram veri
 
 ## Modelo educacional e estrutura
 
-Os raios dos corpos, distâncias, períodos, inclinações e posições são ilustrativos. As órbitas são circulares e coplanares. Terra e Marte usam mapas de superfície, e os demais modelos usam texturas ilustrativas. Os planetas estão ordenados por distância ao Sol.
+Os raios dos corpos, distâncias, períodos, inclinações e posições são ilustrativos. As órbitas são circulares e coplanares. Os modelos usam mapas de superfície ou de atmosfera, com cores ajustadas para visualização. Os planetas estão ordenados por distância ao Sol.
 
 - `assets/hiro.png` é o marcador distribuído pelo [projeto AR.js](https://github.com/AR-js-org/AR.js/blob/3.4.7/data/images/hiro.png).
 - `index.html` contém a interface e o ponto de entrada.
@@ -60,6 +60,8 @@ Os raios dos corpos, distâncias, períodos, inclinações e posições são ilu
 [A-Frame](https://aframe.io/) · [Rastreamento por marcador no AR.js](https://ar-js-org.github.io/AR.js-Docs/marker-based/) · [Planetas na NASA](https://science.nasa.gov/solar-system/planets/)
 
 
-## Créditos dos mapas e do cartão do Sol
+## Vistas dos astros e créditos
 
-Os mapas da Terra e de Marte foram produzidos por [Solar System Scope](https://www.solarsystemscope.com/textures/) e são distribuídos sob a licença [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Os arquivos JPG de 2K foram mantidos sem alterações de imagem e renomeados para `terra.jpg` e `marte.jpg`. As informações sobre o Sol foram consultadas na [NASA](https://science.nasa.gov/sun/facts/).
+Ao selecionar um astro, a animação congela e o modelo mostra uma vista fixa voltada para a câmera. A vista da Terra é centrada na América do Sul e inclui a América Central e o México. Ao voltar, a posição orbital, o giro e a inclinação são restaurados.
+
+Os mapas da Terra, dos demais planetas e do Sol foram produzidos por [Solar System Scope](https://www.solarsystemscope.com/textures/) e são distribuídos sob a licença [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Os mapas de Terra e Marte mantêm a resolução de 2K. Os demais foram reduzidos para 1024 × 512 para o uso em celular. Vênus usa a vista de sua atmosfera. Os anéis de Saturno usam uma representação ilustrativa. As informações sobre o Sol foram consultadas na [NASA](https://science.nasa.gov/sun/facts/).
