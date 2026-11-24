@@ -1,5 +1,4 @@
-import { solarBodies } from './planets.js?v=lua';
-import { registerSolarSystem } from './solar-system.js?v=lua';
+import { registerSolarSystem } from './solar-system.js?v=cena';
 
 const params = new URLSearchParams(location.search);
 const ar = params.get('modo') === 'ra';
@@ -54,7 +53,7 @@ async function start() {
     anchor = document.createElement('a-marker');
     anchor.setAttribute('preset', 'hiro');
     anchor.setAttribute('smooth', 'true');
-    anchor.addEventListener('markerFound', () => { status.textContent = 'Marcador Hiro detectado'; });
+    anchor.addEventListener('markerFound', () => { status.textContent = mvp ? 'Marcador Hiro detectado' : 'Marcador Hiro detectado. Toque em um astro.'; });
     anchor.addEventListener('markerLost', () => { status.textContent = 'Marcador fora de vista. Aponte a câmera para o Hiro.'; });
     window.addEventListener('arjs-video-loaded', () => {
       status.textContent = 'Aponte a câmera para o marcador Hiro.';
@@ -66,7 +65,7 @@ async function start() {
   } else {
     scene.setAttribute('background', 'color: #080e20');
     camera.setAttribute('rotation', '-36.87 0 0');
-    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque em um astro ou escolha pelo nome.';
+    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque em um astro para explorar.';
   }
   scene.append(anchor);
 
@@ -100,7 +99,7 @@ async function start() {
     const system = document.createElement('a-entity');
     system.setAttribute('solar-system', '');
     anchor.append(system);
-    scene.addEventListener('loaded', () => bindControls(scene, system, frameSelection), { once: true });
+    scene.addEventListener('loaded', () => bindDetails(scene, system, frameSelection), { once: true });
     stage.append(scene);
     return;
   }
@@ -113,56 +112,32 @@ async function start() {
   stage.append(scene);
 }
 
-function bindControls(scene, system, frameSelection) {
+function bindDetails(scene, system, frameSelection) {
   const simulation = system.components['solar-system'];
-  const controls = document.querySelector('#controls');
   const details = document.querySelector('#details');
   const name = document.querySelector('#planet-name');
-  const pause = document.querySelector('#pause');
-  const menu = document.querySelector('#planets');
-  const buttons = solarBodies.map((body, index) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = body.name;
-    button.addEventListener('click', () => select(index));
-    menu.append(button);
-    return button;
-  });
 
   function select(index) {
-    if (simulation.selected !== null) return;
     frameSelection?.(true);
     simulation.select(index);
-    const body = solarBodies[index];
+    const { body } = simulation.bodies[index];
     name.textContent = body.name;
     document.querySelector('#planet-type').textContent = body.kind;
     document.querySelector('#planet-fact').textContent = body.fact;
-    controls.hidden = true;
     details.hidden = false;
     name.focus();
   }
 
   document.querySelector('#back').addEventListener('click', () => {
-    const index = simulation.selected;
     simulation.showOverview();
     frameSelection?.(false);
     details.hidden = true;
-    controls.hidden = false;
-    buttons[index].focus();
-  });
-  pause.addEventListener('click', () => {
-    simulation.paused = !simulation.paused;
-    pause.textContent = simulation.paused ? 'Continuar' : 'Pausar';
-  });
-  document.querySelector('#speed').addEventListener('change', (event) => {
-    simulation.speed = Number(event.target.value);
   });
   scene.canvas.addEventListener('pointerup', (event) => {
     if (event.button !== 0 || !event.isPrimary) return;
     const index = simulation.pick(event);
     if (index !== null) select(index);
   });
-  controls.hidden = false;
 }
 
 function showError(error) {

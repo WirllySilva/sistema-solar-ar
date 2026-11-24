@@ -6,28 +6,24 @@ body { margin: 0; overflow: hidden; }
 #stage a-scene { position: absolute; inset: 0; }
 #stage canvas { touch-action: none; }
 body.ar { background: transparent; }
-header, footer, main { position: fixed; z-index: 2; left: 0; right: 0; pointer-events: none; }
-header, footer, main { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
+header, main { position: fixed; z-index: 2; left: 0; right: 0; pointer-events: none; }
+header, main { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
 header { top: 0; padding-top: max(14px, env(safe-area-inset-top)); background: linear-gradient(#080e20f7, #080e2000); }
-footer, main { bottom: 0; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
-footer { background: linear-gradient(transparent, #080e20f7 25%); padding-top: 12px; }
+main { bottom: 0; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
 .heading h1 { font-size: clamp(1.35rem, 4vw, 2rem); margin: 0; letter-spacing: -.035em; }
 p { margin: 5px 0 10px; line-height: 1.45; }
 .heading p, #status { color: #d0ddf3; font-size: .875rem; }
 #status { width: fit-content; background: #101b30ed; border-radius: 8px; padding: 5px 9px; }
-nav, .playback { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-a, button, select { pointer-events: auto; font: inherit; font-size: .875rem; min-height: 44px; padding: 8px 11px; border: 1px solid #52668e; border-radius: 8px; color: inherit; background: #121e36; }
+nav { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+a, button { pointer-events: auto; font: inherit; font-size: .875rem; min-height: 44px; padding: 8px 11px; border: 1px solid #52668e; border-radius: 8px; color: inherit; background: #121e36; }
 a { display: inline-flex; align-items: center; text-decoration: none; }
-button, select { cursor: pointer; }
+button { cursor: pointer; }
 a:hover, button:hover, a[aria-current="page"] { background: #253b61; }
 :focus-visible { outline: 3px solid #a8dfff; outline-offset: 2px; }
-.playback { margin-bottom: 8px; }
-.playback label { margin-left: 5px; }
-#planets button { white-space: nowrap; }
 #details { pointer-events: auto; width: min(100%, 390px); padding: 14px 16px; background: #101b30f5; border: 1px solid #52668e; border-radius: 12px; }
 #details h2 { margin: 0; font-size: 1.4rem; }
 .planet-type { color: #abcafa; font-size: .875rem; }
 @media (max-height: 480px) {
   header { right: auto; max-width: 52vw; }
-  footer, main { left: auto; max-width: 56vw; }
+  main { left: auto; max-width: 56vw; }
 }

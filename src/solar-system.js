@@ -39,8 +39,6 @@ export function registerSolarSystem(AFRAME) {
   AFRAME.registerComponent('solar-system', {
     init() {
       this.elapsed = 0;
-      this.paused = false;
-      this.speed = 1;
       this.selected = null;
       this.overview = new THREE.Group();
       this.focus = new THREE.Group();
@@ -82,16 +80,7 @@ export function registerSolarSystem(AFRAME) {
           }
         }
 
-        const points = Array.from({ length: 80 }, (_, i) => {
-          const angle = i * turn / 80;
-          return new THREE.Vector3(Math.cos(angle) * body.orbit, height, Math.sin(angle) * body.orbit);
-        });
-        const orbit = new THREE.LineLoop(
-          new THREE.BufferGeometry().setFromPoints(points),
-          new THREE.LineBasicMaterial({ color: '#7f9fbc', transparent: true, opacity: .48, depthWrite: false })
-        );
-        this.overview.add(orbit);
-        return { body, pivot, axis, globe, orbit };
+        return { body, pivot, axis, globe };
       });
       for (const item of this.bodies) {
         if (item.body.primary) {
@@ -100,6 +89,7 @@ export function registerSolarSystem(AFRAME) {
       }
       this.ray = new THREE.Raycaster();
       this.pointer = new THREE.Vector2();
+      this.projectedCenter = new THREE.Vector3();
       this.focusView = {
         cameraPosition: new THREE.Vector3(),
         pivotPosition: new THREE.Vector3(),
@@ -112,7 +102,7 @@ export function registerSolarSystem(AFRAME) {
     },
 
     updatePositions() {
-      for (const { body, pivot, globe, orbit, primaryPivot } of this.bodies) {
+      for (const { body, pivot, globe, primaryPivot } of this.bodies) {
         if (body === sun) {
           pivot.position.set(0, height, 0);
           continue;
@@ -123,7 +113,6 @@ export function registerSolarSystem(AFRAME) {
           const { x, z } = primaryPivot.position;
           pivot.position.x += x;
           pivot.position.z += z;
-          orbit.position.set(x, 0, z);
         }
         const spinOffset = primaryPivot ? Math.PI - body.phase : 0;
         globe.rotation.y = spinOffset + (this.elapsed % body.spin) * turn / body.spin;
@@ -136,8 +125,7 @@ export function registerSolarSystem(AFRAME) {
         this.faceCamera();
         return;
       }
-      if (this.paused) return;
-      this.elapsed += Math.min(milliseconds, 100) / 1000 * this.speed;
+      this.elapsed += Math.min(milliseconds, 100) / 1000;
       this.updatePositions();
     },
 
@@ -154,7 +142,24 @@ export function registerSolarSystem(AFRAME) {
       const hit = this.ray.intersectObjects(this.bodies.map(({ pivot }) => pivot), true)[0];
       let target = hit?.object;
       while (target && target.userData.bodyIndex === undefined) target = target.parent;
-      return target?.userData.bodyIndex ?? null;
+      if (target) return target.userData.bodyIndex;
+
+      // Dá margem ao toque em astros pequenos, como a Lua.
+      let nearest = null;
+      let nearestDistance = 15;
+      for (const { pivot } of this.bodies) {
+        const center = pivot.getWorldPosition(this.projectedCenter).project(scene.camera);
+        if (Math.abs(center.x) > 1 || Math.abs(center.y) > 1 || Math.abs(center.z) > 1) continue;
+        const distance = Math.hypot(
+          (center.x - this.pointer.x) * rect.width / 2,
+          (center.y - this.pointer.y) * rect.height / 2
+        );
+        if (distance < nearestDistance) {
+          nearest = pivot.userData.bodyIndex;
+          nearestDistance = distance;
+        }
+      }
+      return nearest;
     },
 
     select(index) {
