@@ -5,17 +5,7 @@ body { margin: 0; overflow: hidden; }
 #stage { position: fixed; inset: 0; overflow: hidden; }
 #stage a-scene { position: absolute; inset: 0; }
 #stage canvas { touch-action: none; }
-body.ar { width: 100% !important; height: 100% !important; margin: 0 !important; }
-.ar #stage, .ar #arjs-video {
-  position: fixed !important;
-  inset: 50% auto auto 50% !important;
-  width: var(--ar-frame-width, 100vw) !important;
-  height: var(--ar-frame-height, 100vh) !important;
-  margin: 0 !important;
-  transform: translate(-50%, -50%);
-}
-.ar #arjs-video { z-index: 0 !important; object-fit: contain; pointer-events: none; }
-.ar #stage { z-index: 1; }
+body.ar { background: transparent; }
 header, main { position: fixed; z-index: 2; left: 0; right: 0; pointer-events: none; }
 header, main { padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
 header { top: 0; padding-top: max(14px, env(safe-area-inset-top)); background: linear-gradient(#080e20f7, #080e2000); }
