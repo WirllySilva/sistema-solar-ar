@@ -36,7 +36,7 @@ O Chrome permite câmera em `localhost` quando a página roda no próprio dispos
 
 1. Imprima o [marcador Hiro oficial](./assets/hiro.png) ou mostre a imagem em outra tela. Preserve toda a borda preta e a margem branca. Coloque o marcador sobre uma superfície plana e bem iluminada.
 2. Abra o endereço HTTPS com `?modo=ra&etapa=mvp` e permita o uso da câmera. Enquadre o marcador inteiro e ajuste a distância até o Sol 3D aparecer sobre ele. Tire o marcador do quadro e volte a enquadrá-lo para verificar a perda e a recuperação do rastreamento.
-3. Abra a página com `?modo=ra`. Enquadre o marcador perto do centro da imagem. A câmera aparece inteira, com margens quando a proporção do vídeo difere da tela. O modelo em RA é reduzido para caber ao redor do Hiro. Observe os planetas em torno do Sol e a Lua em torno da Terra.
+3. Abra a página com `?modo=ra`. Afaste um pouco o celular para enquadrar os astros e observe o movimento dos planetas ao redor do Sol e da Lua ao redor da Terra.
 4. Toque diretamente em Saturno na cena. O sistema deve pausar e mostrar Saturno ampliado com seu cartão. Volte à visão geral e confirme que a trajetória continua da posição anterior.
 5. Repita tocando em outro astro na cena. Se a câmera falhar, confira a permissão do site no Chrome e reabra a página. Se o marcador falhar, evite reflexos, enquadre a borda inteira e teste com a versão impressa.
 
