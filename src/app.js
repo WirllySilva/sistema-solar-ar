@@ -8,6 +8,11 @@ const arLibrary = 'https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/af
 const stage = document.querySelector('#stage');
 const status = document.querySelector('#status');
 
+function showStatus(message) {
+  status.textContent = message;
+  status.hidden = false;
+}
+
 function loadScript(url) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -54,8 +59,8 @@ async function start() {
     anchor = document.createElement('a-marker');
     anchor.setAttribute('preset', 'hiro');
     anchor.setAttribute('smooth', 'true');
-    anchor.addEventListener('markerFound', () => { status.textContent = mvp ? 'Marcador Hiro detectado' : 'Marcador Hiro detectado. Toque em um astro.'; });
-    anchor.addEventListener('markerLost', () => { status.textContent = 'Marcador fora de vista. Aponte a câmera para o Hiro.'; });
+    anchor.addEventListener('markerFound', () => { status.hidden = true; });
+    anchor.addEventListener('markerLost', () => { showStatus('Marcador fora de vista. Aponte a câmera para o Hiro.'); });
     window.addEventListener('arjs-video-loaded', ({ detail }) => {
       const video = detail.component;
       const matchVideoAspect = () => {
@@ -66,16 +71,16 @@ async function start() {
       video.addEventListener('loadedmetadata', matchVideoAspect);
       video.addEventListener('resize', matchVideoAspect);
       matchVideoAspect();
-      status.textContent = 'Aponte a câmera para o marcador Hiro.';
+      showStatus('Aponte a câmera para o marcador Hiro.');
     });
     window.addEventListener('camera-error', () => {
-      status.textContent = 'Câmera indisponível. Confira a permissão do Chrome e recarregue.';
+      showStatus('Câmera indisponível. Confira a permissão do Chrome e recarregue.');
     });
-    status.textContent = 'Permita o acesso à câmera quando o Chrome solicitar.';
+    showStatus('Permita o acesso à câmera quando o Chrome solicitar.');
   } else {
     scene.setAttribute('background', 'color: #080e20');
     camera.setAttribute('rotation', '-36.87 0 0');
-    status.textContent = mvp ? 'Prévia sem câmera · Sol' : 'Toque em um astro para explorar.';
+    showStatus(mvp ? 'Prévia sem câmera · Sol' : 'Toque em um astro para explorar.');
   }
   scene.append(anchor);
 
@@ -182,7 +187,7 @@ function bindDetails(scene, system, frameSelection) {
 
 function showError(error) {
   console.error(error);
-  status.textContent = error.message;
+  showStatus(error.message);
 }
 
 if (document.readyState === 'loading') {
