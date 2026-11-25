@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Sistema Solar Interativo em Realidade Aumentada</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./src/styles.css?v=proporcao">
+  <link rel="stylesheet" href="./src/styles.css?v=interface">
   <script defer src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script type="module" src="./src/app.js?v=proporcao"></script>
 </head>
@@ -16,22 +16,28 @@
       <h1>Sistema Solar Interativo</h1>
       <p>Tamanhos, distâncias e velocidades ilustrativos</p>
     </div>
-    <nav aria-label="Modo de visualização">
-      <a id="ar-link" href="./?modo=ra">Usar câmera</a>
-      <a id="preview-link" href="./">Ver sem câmera</a>
-      <a href="./assets/hiro.png" target="_blank" rel="noopener">Marcador Hiro ↗</a>
-    </nav>
-    <p id="status" role="status">Carregando a cena 3D…</p>
-    <p class="rotation-hint">Vire o celular de lado para gravar em tela horizontal.</p>
   </header>
-  <main>
-    <section id="details" aria-labelledby="planet-name" hidden>
-      <h2 id="planet-name" tabindex="-1"></h2>
-      <p id="planet-type" class="planet-type"></p>
-      <p id="planet-fact"></p>
-      <button id="back" type="button">Voltar ao Sistema Solar</button>
-    </section>
-  </main>
+  <div class="bottom-ui">
+    <main>
+      <section id="details" aria-labelledby="planet-name" hidden>
+        <h2 id="planet-name" tabindex="-1"></h2>
+        <p id="planet-type" class="planet-type"></p>
+        <p id="planet-fact"></p>
+        <button id="back" type="button">Voltar ao Sistema Solar</button>
+      </section>
+    </main>
+    <footer>
+      <div class="guidance">
+        <p id="status" role="status">Carregando a cena 3D…</p>
+        <p class="rotation-hint">Vire o celular de lado para gravar em tela horizontal.</p>
+      </div>
+      <nav aria-label="Modo de visualização">
+        <a id="ar-link" href="./?modo=ra">Usar câmera</a>
+        <a id="preview-link" href="./">Ver sem câmera</a>
+        <a href="./assets/hiro.png" target="_blank" rel="noopener">Marcador Hiro ↗</a>
+      </nav>
+    </footer>
+  </div>
   <noscript>Ative o JavaScript para abrir a simulação.</noscript>
 </body>
 </html>
